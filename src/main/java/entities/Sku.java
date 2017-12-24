@@ -12,6 +12,8 @@ public class Sku {
 
   private JSONObject body;
 
+  private int similarity;
+
   public Sku(String name, Integer id, JSONObject body) {
     this.name = name;
     this.id = id;
@@ -58,6 +60,20 @@ public class Sku {
    */
   public JSONObject getBody() {
     return body;
+  }
+
+  /**
+   * @param similarity the similarity to set
+   */
+  public void setSimilarity(int similarity) {
+    this.similarity = similarity;
+  }
+
+  /**
+   * @return the similarity
+   */
+  public int getSimilarity() {
+    return similarity;
   }
 
   public static class Map {

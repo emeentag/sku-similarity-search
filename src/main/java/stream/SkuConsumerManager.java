@@ -1,6 +1,5 @@
 package stream;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,6 +27,7 @@ public class SkuConsumerManager implements Runnable {
     this.pool = pool;
     this.orderedQueue = orderedQueue;
     this.searchObject = searchObject;
+
     weightsMap = new ConcurrentHashMap<>();
     weightsMap.put("a", 10);
     weightsMap.put("b", 9);
@@ -46,9 +46,14 @@ public class SkuConsumerManager implements Runnable {
     int sizeOfSkuQueue = skuQueue.size();
     while (this.inService.get() && orderedQueue.size() < sizeOfSkuQueue) {
       Sku sku = skuQueue.poll();
-      this.pool.submit(new SkuConsumer(sku, orderedQueue, inService, searchObject, weightsMap));
+      this.pool.submit(new SkuConsumer(sku, orderedQueue, searchObject, weightsMap));
+    }
+
+    for (int i = 0; i < 10; i++) {
+      //System.out.println(this.orderedQueue.poll().getName() + ", " + this.orderedQueue.poll().getSimilarity());
     }
 
     this.inService.set(false);
+    this.pool.shutdown();
   }
 }

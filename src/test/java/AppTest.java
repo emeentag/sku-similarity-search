@@ -55,21 +55,21 @@ public class AppTest {
     Assert.assertNotEquals(compareObject.get("att-j"), "att-j-13");
   }
 
-  @Test
+  /*   @Test
   public void testSkuGeneratorQueue() {
     SkuGenerator skuGenerator = new SkuGenerator(jsonObjects, skuQueue);
     pool.submit(skuGenerator);
     waitForQueueSize(skuGenerator.getSkuQueue(), 20000);
     Assert.assertEquals(20000, skuGenerator.getSkuQueue().size());
   }
-
+  
   @Test
   public void testSkuConsumer() {
     SkuGenerator consumerManager = new SkuGenerator(jsonObjects, skuQueue);
     pool.submit(consumerManager);
     waitAWhile(3000);
     Assert.assertEquals(20000, consumerManager.getSkuQueue().size());
-  }
+  } */
 
   private void waitForQueueSize(LinkedBlockingQueue<Sku> queue, int size) {
     while (queue.size() < size) {

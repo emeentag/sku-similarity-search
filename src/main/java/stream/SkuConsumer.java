@@ -2,7 +2,6 @@ package stream;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import entities.Sku;
 
@@ -13,14 +12,13 @@ public class SkuConsumer implements Runnable {
 
   private Sku sku;
   private PriorityBlockingQueue<Sku> orderedQueue;
-  private AtomicBoolean inService;
   private Sku searchObject;
   private ConcurrentHashMap<String, Integer> weightsMap;
+  private int attrAcc;
 
-  public SkuConsumer(Sku sku, PriorityBlockingQueue<Sku> orderedQueue, AtomicBoolean inService, Sku searchObject,
+  public SkuConsumer(Sku sku, PriorityBlockingQueue<Sku> orderedQueue, Sku searchObject,
       ConcurrentHashMap<String, Integer> weightsMap) {
     this.sku = sku;
-    this.inService = inService;
     this.orderedQueue = orderedQueue;
     this.searchObject = searchObject;
     this.weightsMap = weightsMap;
@@ -28,9 +26,17 @@ public class SkuConsumer implements Runnable {
 
   @Override
   public void run() {
-    if (inService.get()) {
+    // Calculate similarity.
+    this.sku.getBody().keys().forEachRemaining((key) -> {
+      String[] attrParts = this.sku.getBody().getString(key).split("-");
+      String[] searchSkuAttrParts = searchObject.getBody().getString(key).split("-");
+      int attributeWeight = weightsMap.get(attrParts[1]);
+      int attrValue = Math.abs(Integer.valueOf(attrParts[2]) - Integer.valueOf(searchSkuAttrParts[2]));
+      attrAcc += (attributeWeight * attrValue);
+    });
 
-    }
+    // Add this sku to orderedQueue
+    this.sku.setSimilarity(attrAcc);
+    this.orderedQueue.put(this.sku);
   }
-
 }

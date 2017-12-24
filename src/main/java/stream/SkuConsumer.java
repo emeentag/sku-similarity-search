@@ -34,21 +34,22 @@ public class SkuConsumer implements Runnable {
   @Override
   public void run() {
     // Calculate similarity.
-    this.sku.getBody().keys().forEachRemaining((key) -> {
-      String[] attrParts = this.sku.getBody().getString(key).split("-");
-      String[] searchSkuAttrParts = searchObject.getBody().getString(key).split("-");
-      int attributeWeight = weightsMap.get(attrParts[1]);
-      int attrValue = Math.abs(Integer.valueOf(attrParts[2]) - Integer.valueOf(searchSkuAttrParts[2]));
-      attrAcc += (attributeWeight * attrValue);
-    });
+    if (this.inService.get()) {
+      this.sku.getBody().keys().forEachRemaining((key) -> {
+        String[] attrParts = this.sku.getBody().getString(key).split("-");
+        String[] searchSkuAttrParts = searchObject.getBody().getString(key).split("-");
+        int attributeWeight = weightsMap.get(attrParts[1]);
+        int attrValue = Math.abs(Integer.valueOf(attrParts[2]) - Integer.valueOf(searchSkuAttrParts[2]));
+        attrAcc += (attributeWeight * attrValue);
+      });
 
-    // Add this sku to orderedQueue
-    this.sku.setSimilarity(attrAcc);
-    this.orderedQueue.put(this.sku);
+      // Add this sku to orderedQueue
+      this.sku.setSimilarity(attrAcc);
+      this.orderedQueue.put(this.sku);
 
-    int currrentCounter = this.skuCounter.incrementAndGet();
-    if (currrentCounter == limit) {
-      inService.set(false);
+      if (this.skuCounter.incrementAndGet() == limit) {
+        inService.set(false);
+      }
     }
   }
 }

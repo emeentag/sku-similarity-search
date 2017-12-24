@@ -1,0 +1,11 @@
+l2017-12-24 21:48:11,005 INFO [pool-1-thread-2] stream.SkuConsumerManager  > Your query SKU object: sku-1, 0
+Z2017-12-24 21:48:11,018 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-18151, 70
+Y2017-12-24 21:48:11,020 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-3766, 79
+Z2017-12-24 21:48:11,022 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-14568, 79
+Y2017-12-24 21:48:11,023 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-3296, 81
+Z2017-12-24 21:48:11,027 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-14792, 86
+Y2017-12-24 21:48:11,028 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-2803, 86
+Y2017-12-24 21:48:11,029 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-4706, 88
+Z2017-12-24 21:48:11,031 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-17802, 89
+Y2017-12-24 21:48:11,032 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-6276, 90
+Y2017-12-24 21:48:11,032 INFO [pool-1-thread-2] stream.SkuConsumerManager  > sku-1846, 91

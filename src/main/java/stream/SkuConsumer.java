@@ -2,6 +2,8 @@ package stream;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import entities.Sku;
 
@@ -9,19 +11,24 @@ import entities.Sku;
  * SkuConsumer
  */
 public class SkuConsumer implements Runnable {
-
   private Sku sku;
   private PriorityBlockingQueue<Sku> orderedQueue;
   private Sku searchObject;
   private ConcurrentHashMap<String, Integer> weightsMap;
   private int attrAcc;
+  private AtomicInteger skuCounter;
+  private int limit;
+  private AtomicBoolean inService;
 
   public SkuConsumer(Sku sku, PriorityBlockingQueue<Sku> orderedQueue, Sku searchObject,
-      ConcurrentHashMap<String, Integer> weightsMap) {
+      ConcurrentHashMap<String, Integer> weightsMap, AtomicBoolean inService, AtomicInteger skuCounter, int limit) {
     this.sku = sku;
     this.orderedQueue = orderedQueue;
     this.searchObject = searchObject;
     this.weightsMap = weightsMap;
+    this.skuCounter = skuCounter;
+    this.limit = limit;
+    this.inService = inService;
   }
 
   @Override
@@ -38,5 +45,10 @@ public class SkuConsumer implements Runnable {
     // Add this sku to orderedQueue
     this.sku.setSimilarity(attrAcc);
     this.orderedQueue.put(this.sku);
+
+    int currrentCounter = this.skuCounter.incrementAndGet();
+    if (currrentCounter == limit) {
+      inService.set(false);
+    }
   }
 }

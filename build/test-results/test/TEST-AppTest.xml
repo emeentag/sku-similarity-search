@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="AppTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2017-12-24T16:40:05" hostname="Serdars-MBP" time="0.004">
+<testsuite name="AppTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2017-12-24T17:11:35" hostname="Serdars-MBP" time="0.003">
   <properties/>
   <testcase name="testReadJSONFile" classname="AppTest" time="0.001"/>
   <testcase name="testReadSku1" classname="AppTest" time="0.001"/>

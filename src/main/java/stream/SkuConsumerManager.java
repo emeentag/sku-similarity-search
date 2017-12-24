@@ -5,6 +5,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.log4j.Logger;
 
 import entities.Sku;
 
@@ -13,20 +16,26 @@ import entities.Sku;
  */
 public class SkuConsumerManager implements Runnable {
 
+  private final Logger logger = Logger.getLogger(this.getClass());
+
   private LinkedBlockingQueue<Sku> skuQueue;
   private AtomicBoolean inService;
   private ExecutorService pool;
   private PriorityBlockingQueue<Sku> orderedQueue;
   private Sku searchObject;
   private ConcurrentHashMap<String, Integer> weightsMap;
+  private AtomicInteger skuCounter;
+  private int limit;
 
   public SkuConsumerManager(LinkedBlockingQueue<Sku> skuQueue, PriorityBlockingQueue<Sku> orderedQueue,
-      AtomicBoolean inService, ExecutorService pool, Sku searchObject) {
+      AtomicBoolean inService, ExecutorService pool, Sku searchObject, int limit) {
     this.skuQueue = skuQueue;
     this.inService = inService;
     this.pool = pool;
     this.orderedQueue = orderedQueue;
     this.searchObject = searchObject;
+    this.skuCounter = new AtomicInteger(0);
+    this.limit = limit;
 
     weightsMap = new ConcurrentHashMap<>();
     weightsMap.put("a", 10);
@@ -43,14 +52,14 @@ public class SkuConsumerManager implements Runnable {
 
   @Override
   public void run() {
-    int sizeOfSkuQueue = skuQueue.size();
-    while (this.inService.get() && orderedQueue.size() < sizeOfSkuQueue) {
+    while (this.inService.get()) {
       Sku sku = skuQueue.poll();
-      this.pool.submit(new SkuConsumer(sku, orderedQueue, searchObject, weightsMap));
+      this.pool.submit(new SkuConsumer(sku, orderedQueue, searchObject, weightsMap, inService, skuCounter, limit));
     }
 
     for (int i = 0; i < 10; i++) {
-      //System.out.println(this.orderedQueue.poll().getName() + ", " + this.orderedQueue.poll().getSimilarity());
+      Sku s = orderedQueue.poll();
+      logger.info(s.getName() + ", " + s.getSimilarity());
     }
 
     this.inService.set(false);

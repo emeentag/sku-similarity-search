@@ -12,6 +12,26 @@ apply plugin: 'java'
 // Apply the application plugin to add support for building an application
 apply plugin: 'application'
 
+// Define the main class for the application
+mainClassName = 'App'
+
+version = '1.0'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Build JAR
+task createJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'SKU Similarity Analyzer',
+        	'Implementation-Version': version,
+        	'Main-Class': mainClassName
+    }
+    
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use jcenter for resolving your dependencies.

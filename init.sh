@@ -1,16 +1,31 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -e          # exit if any command fails
-set -u          # prevent using an undefined variable
-set -o pipefail # force pipelines to fail on the first non-zero status
+# Ser ENV vars.
+export LOG_LEVEL="all" \
+       SERVER_PORT=8080 \
+       FILE_PATH="/Users/ssimsek/projects/recommendation_service/test-data.json" \
+       WEIGHTS_MAP="a:10,b:9,c:8,d:7,e:6,f:5,g:4,h:3,i:2,j:1"
 
-# In order for us to be able to run your solution in our environment, it would
-# be preferrable if you use docker to launch your application
+PROD="--prod"
+JAR_PATH=build/libs/recommendation_service-all-1.0.jar
 
-# docker build -t h24-test-task .
-# docker run -d --rm -p 3000:80 h24-test-task <&0
+if [ \( "$1" = "$PROD" \) -a \( "$#" -ne 0 \) ]
+then
+  if [ -f "$JAR_PATH" ]
+  then
+    echo "Application jar file is exist."
+  else
+    echo "Application jar file is not exist."
+    echo "Building application jar file."
 
-# As our main language is golang you could also run your application with go,
-# e.g.:
+    gradle test
+    gradle createJar
+  fi
 
-#  go run main.go 3000 <&0
+  echo "Running application Jar file."
+
+  java -jar "$JAR_PATH"
+else
+  echo "Running application in dev mode."
+  gradle run
+fi

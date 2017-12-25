@@ -23,7 +23,7 @@ This algorithm is used for calculating the similarity value. A consumer calculat
 * These steps need to be applied for the each attribute of the compare object. Then all calculated attributes results are accumulating. This accumulated result will be the similarity value of our compare object.
 
 ## How to Test
-For testing the app you have to install gradle on your machine.
+For testing the app you have to install gradle on your machine. Please note that a builded JAR file is also in repository so you do not need to build the project again. If you do not want to install gradle or others just run `./init.sh --prod` for manuel test.
 
 ### Unit Tests
 Application has some unit tests. So you can run unit tests with command `gradle test --info`

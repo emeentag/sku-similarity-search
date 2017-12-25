@@ -21,7 +21,7 @@ import utils.Utils;
 
 public class AppTest {
 
-  private static String filePath = "/Users/ssimsek/projects/recommendation_service/home24-test-data.json";
+  private static String filePath = "/Users/ssimsek/projects/recommendation_service/test-data.json";
   private static JSONObject skuObjects;
   private static ExecutorService pool;
   private static AtomicBoolean inService;
@@ -92,7 +92,7 @@ public class AppTest {
     waitInService();
     Assert.assertEquals(0, skuQueue.size());
     waitInWhile(3000);
-    Assert.assertEquals(limitForExit - 11, orderedQueue.size());
+    Assert.assertEquals(limitForExit, orderedQueue.size());
   }
 
   private void waitForQueueSize(LinkedBlockingQueue<Sku> queue, int size) {

@@ -15,9 +15,6 @@ import entities.Sku;
  * SkuConsumerManager
  */
 public class SkuConsumerManager implements Runnable {
-
-  private final Logger logger = Logger.getLogger(this.getClass());
-
   private LinkedBlockingQueue<Sku> skuQueue;
   private AtomicBoolean inService;
   private ExecutorService pool;
@@ -47,24 +44,6 @@ public class SkuConsumerManager implements Runnable {
       Sku sku = skuQueue.poll();
       this.pool
           .submit(new SkuConsumer(sku, orderedQueue, searchObject, weightsMap, inService, skuCounter, limitForExit));
-    }
-
-    this.printResults();
-
-    this.pool.shutdown();
-  }
-
-  /**
-   * Print similar SKUs.
-   */
-  private void printResults() {
-    for (int i = 0; i < 11; i++) {
-      Sku s = orderedQueue.poll();
-      if (s.getName().equals(searchObject.getName())) {
-        logger.info("Your query SKU object: " + s.getName() + ", " + s.getSimilarity());
-      } else {
-        logger.info(s.getName() + ", " + s.getSimilarity());
-      }
     }
   }
 }

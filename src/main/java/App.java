@@ -1,16 +1,5 @@
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.json.JSONObject;
-
 import config.Config;
-import entities.Sku;
-import stream.SkuConsumerManager;
-import stream.SkuGenerator;
+import server.Server;
 import utils.Utils;
 
 /*
@@ -18,58 +7,12 @@ import utils.Utils;
  */
 public class App {
 
-  private final String filePath = "/Users/ssimsek/projects/recommendation_service/home24-test-data.json";
-
-  private SkuGenerator skuGenerator;
-  private SkuConsumerManager skuConsumerManager;
-  private ExecutorService pool;
-  private AtomicBoolean inService;
-  private static LinkedBlockingQueue<Sku> skuQueue;
-  private PriorityBlockingQueue<Sku> orderedQueue;
-  private JSONObject skuObjects;
-  private Sku searchObject;
-  private ConcurrentHashMap<String, Integer> weightsMap;
-
   public App() {
-    Config.configureLogger();
-    init();
-  }
+    Config.initConfig();
+    Config.SKU_OBJECTS = Utils.readJsonFile(Config.FILE_PATH);
 
-  private void init() {
-    pool = Executors.newCachedThreadPool();
-    inService = new AtomicBoolean(true);
-    skuQueue = new LinkedBlockingQueue<Sku>();
-    orderedQueue = new PriorityBlockingQueue<Sku>(2048,
-        (s1, s2) -> Integer.compare(s1.getSimilarity(), s2.getSimilarity()));
-
-    // Read json file.
-    skuObjects = Utils.readJsonFile(filePath);
-
-    // Create sku stream by reading the json file.
-    skuGenerator = new SkuGenerator(skuObjects, skuQueue, inService);
-
-    // Create sku consumer manager for consuming the skus.
-    int limitForExit = skuObjects.keySet().size();
-    searchObject = Sku.Map.toSku("sku-1", skuObjects.getJSONObject("sku-1"));
-
-    weightsMap = new ConcurrentHashMap<>();
-    weightsMap.put("a", 10);
-    weightsMap.put("b", 9);
-    weightsMap.put("c", 8);
-    weightsMap.put("d", 7);
-    weightsMap.put("e", 6);
-    weightsMap.put("f", 5);
-    weightsMap.put("g", 4);
-    weightsMap.put("h", 3);
-    weightsMap.put("i", 2);
-    weightsMap.put("j", 1);
-
-    skuConsumerManager = new SkuConsumerManager(skuQueue, orderedQueue, inService, pool, searchObject, limitForExit,
-        weightsMap);
-
-    // Initialize stream and consumers.
-    pool.submit(skuGenerator);
-    pool.submit(skuConsumerManager);
+    // Start server.
+    Server.getInstance().start();
   }
 
   public static void main(String[] args) {

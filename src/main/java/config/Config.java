@@ -2,9 +2,11 @@ package config;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.PropertyConfigurator;
+import org.json.JSONObject;
 
 /**
  * Config
@@ -12,7 +14,31 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class Config {
 
-  public static Level LOG_LEVEL = Level.ALL;
+  public static Level LOG_LEVEL;
+  public static ConcurrentHashMap<String, Integer> WEIGHTS_MAP;
+  public static int SERVER_PORT;
+  public static String FILE_PATH;
+  public static JSONObject SKU_OBJECTS;
+
+  public static void initConfig() {
+    SERVER_PORT = 8080;
+    LOG_LEVEL = Level.ALL;
+    WEIGHTS_MAP = new ConcurrentHashMap<>();
+    WEIGHTS_MAP.put("a", 10);
+    WEIGHTS_MAP.put("b", 9);
+    WEIGHTS_MAP.put("c", 8);
+    WEIGHTS_MAP.put("d", 7);
+    WEIGHTS_MAP.put("e", 6);
+    WEIGHTS_MAP.put("f", 5);
+    WEIGHTS_MAP.put("g", 4);
+    WEIGHTS_MAP.put("h", 3);
+    WEIGHTS_MAP.put("i", 2);
+    WEIGHTS_MAP.put("j", 1);
+
+    FILE_PATH = "/Users/ssimsek/projects/recommendation_service/test-data.json";
+
+    configureLogger();
+  }
 
   /**
   * Setups the loader.

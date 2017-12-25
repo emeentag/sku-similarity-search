@@ -92,7 +92,7 @@ public class GetHandler implements HttpHandler {
   private StringBuffer prepareResponse(PriorityBlockingQueue<Sku> orderedQueue, Sku searchObject) {
     StringBuffer response = new StringBuffer();
 
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < Config.NUMBER_OF_RESULTS; i++) {
       Sku s = orderedQueue.poll();
       if (s.getName().equals(searchObject.getName())) {
         response.append("Your query SKU object: ").append(s.getName()).append(", ").append(s.getSimilarity())

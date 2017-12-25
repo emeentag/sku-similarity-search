@@ -4,7 +4,8 @@
 export LOG_LEVEL="all" \
        SERVER_PORT=8080 \
        FILE_PATH="/Users/ssimsek/projects/recommendation_service/test-data.json" \
-       WEIGHTS_MAP="a:10,b:9,c:8,d:7,e:6,f:5,g:4,h:3,i:2,j:1"
+       WEIGHTS_MAP="a:10,b:9,c:8,d:7,e:6,f:5,g:4,h:3,i:2,j:1" \
+       NUMBER_OF_RESULTS=10
 
 PROD="--prod"
 JAR_PATH=build/libs/recommendation_service-all-1.0.jar

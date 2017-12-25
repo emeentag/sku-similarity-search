@@ -21,6 +21,7 @@ public class Config {
   public static Level LOG_LEVEL;
   public static ConcurrentHashMap<String, Integer> WEIGHTS_MAP;
   public static int SERVER_PORT;
+  public static int NUMBER_OF_RESULTS;
   public static String FILE_PATH;
   public static JSONObject SKU_OBJECTS;
 
@@ -32,6 +33,7 @@ public class Config {
     String serverPort = System.getenv("SERVER_PORT");
     String filePath = System.getenv("FILE_PATH");
     String weights = System.getenv("WEIGHTS_MAP");
+    String numberOfResults = System.getenv("NUMBER_OF_RESULTS");
 
     checkLogLevel(logLevel);
 
@@ -41,7 +43,17 @@ public class Config {
 
     checkWeights(weights);
 
+    checkNumberOfResults(numberOfResults);
+
     configureLogger();
+  }
+
+  private static void checkNumberOfResults(String numberOfResults) {
+    if (numberOfResults != null) {
+      NUMBER_OF_RESULTS = Integer.valueOf(numberOfResults);
+    } else {
+      NUMBER_OF_RESULTS = 10;
+    }
   }
 
   private static void checkWeights(String weights) {

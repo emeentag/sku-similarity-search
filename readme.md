@@ -17,9 +17,12 @@ This is another main thread which runs with the generator. It takes the json obj
 
 ## Similarity Value Algorithm
 This algorithm is used for calculating the similarity value. A consumer calculates the similarity for each attributes by comparing them with the search object. 
-* For the weights you can assign different values to the attributes by changing the `WEIGHTS_MAP` in env vars. In default application takes attr-a with a bigger weight from attr-z. You can find explanation of the changing `WEIGHTS_MAP`.
-* Once weight is decided, a distance needs to be found by getting a difference from the number value of the attribute. Think about an attribute like in compareObject: `"att-j":"att-j-4"` and for searchObject: `"att-j":"att-j-1"`. So the distance should be `ABS(4-1)`
+* For the weights you can assign different values to the attributes by changing the `WEIGHTS_MAP` in env vars. In default application takes attr-a with a bigger weight than attr-z. You can find explanation of the changing `WEIGHTS_MAP`.
+
+* Once weight is decided, a distance needs to be found by getting a difference from the number value of the attribute. Think about an attribute like in compareObject: `"att-j":"att-j-4"` and for searchObject: `"att-j":"att-j-1"`. So the distance should be `ABS(4-1)`.
+
 * After calculating the distance next step to multiply this distance and the attribute weight.
+
 * These steps need to be applied for the each attribute of the compare object. Then all calculated attributes results are accumulating. This accumulated result will be the similarity value of our compare object.
 
 ## How to Test
